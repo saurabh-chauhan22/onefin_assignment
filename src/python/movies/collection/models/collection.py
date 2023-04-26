@@ -7,5 +7,8 @@ class Collection(models.Model):
     movies = models.ManyToManyField('Movie')
     user = models.ForeignKey(User, on_delete=models.PROTECT)
 
+    class Meta:
+        abstract = False
+
     def __str__(self):
         return self.title

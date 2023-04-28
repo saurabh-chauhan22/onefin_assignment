@@ -1,3 +1,4 @@
 from .movielist_api_view import MovieListApiView
 from .request_count_view import RequestCounterView
 from .user_registeration_view import RegisterView
+from .collection_api_view import CollectionView, CollectionDetailView

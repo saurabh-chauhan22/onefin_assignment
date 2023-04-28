@@ -4,5 +4,6 @@ __all__ = ['MovieSerializer']
 
 class MovieSerializer(serializers.Serializer):
     title = serializers.CharField()
-    genre = serializers.CharField()
-    release_year = serializers.IntegerField()
+    description = serializers.CharField()
+    genres = serializers.CharField()
+    uuid = serializers.UUIDField()

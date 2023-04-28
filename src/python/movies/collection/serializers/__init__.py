@@ -1,1 +1,2 @@
 from .movie_serializer import MovieSerializer
+from .collection_serializer import CollectionSerializer

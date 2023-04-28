@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -6,11 +8,11 @@ class CollectionManager(models.Manager):
     '''
     Collections default manager class
     '''
-    def get_all_movies(self):
+    def get_all_movies(self, user):
         '''
-        Return all the movies from all the collections 
+        Return all the movies for user 
         '''
-        collections_qs = self.all()
+        collections_qs = self.filter(user=user)
         for collection in collections_qs:
             for movie in collection.movies.all():
                 yield movie    
@@ -19,6 +21,7 @@ class CollectionManager(models.Manager):
 class Collection(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
+    uuid = models.UUIDField()
     movies = models.ManyToManyField('Movie')
     user = models.ForeignKey(User, on_delete=models.PROTECT)
 
@@ -37,16 +40,8 @@ class Collection(models.Model):
         assert movie is not None
         self.movies.add(movie)
 
-    def add_collection(self, title, description, user, movie):
-        '''
-        Add collection with movie and the user associated for the collection
-        '''
-        assert title is not None
-        assert description is not None
-        assert user is not None
-        assert movie is not None
-        
-        collection = Collection(title=title, description=description, user=user)
-        self.add_movie_to_collection(movie)
-        collection.save()
-        return collection
+    def save(self,*args,**kwargs):
+        assert self.uuid is None
+        assert self.title is not None and self.description is not None
+        self.uuid = uuid.uuid4()
+        super().save(*args,**kwargs)
